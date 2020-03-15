@@ -1,0 +1,50 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include "tilemap.hpp"
+
+int main()
+{
+	// Création de la fenêtre
+	sf::RenderWindow window(sf::VideoMode(408, 408), "Mario Sokoban !");
+	
+	// Affichage de l'écran de menu
+	sf::Texture tx_fond;
+	tx_fond.loadFromFile("./img/menu.jpg");
+	sf::Sprite spr_fond(tx_fond);
+
+	Tilemap map(1);	// Charge le niveau 1
+
+	// Maintient le programme en fonctionnement
+	while(window.isOpen())
+	{
+		// Détecte les évènements (non-bloquant)
+		sf::Event event;
+		window.pollEvent(event);
+
+		switch(event.type)
+		{
+			case sf::Event::Closed: // Clic sur la croix rouge
+				window.close();
+				break;
+
+			case sf::Event::KeyPressed: // Touche du clavier enfoncée
+				if(event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) // Touche "1"
+				{
+					while(1) {map.afficheMap(window);}
+				}
+				else if(event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) // Touche "2"
+				{
+					// EDITEUR
+				}
+				break;
+		}
+
+		// Actualise la fenêtre et ses éléments
+		window.clear();
+		window.draw(spr_fond);
+		window.display();
+	}
+
+	return 0;
+}
