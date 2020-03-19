@@ -1,6 +1,7 @@
 #include "tilemap.hpp"
+#include "mario.hpp"
 
-Tilemap::Tilemap(int nMap)
+Tilemap::Tilemap(std::string sMap, Mario & mario)
 {
 	// Chargement des textures du niveau
 	this->_txMap['#'].loadFromFile("./img/mur.jpg");
@@ -16,8 +17,7 @@ Tilemap::Tilemap(int nMap)
 	}
 	
 	// Ouvre le fichier correspondant au niveau
-	std::string sMap = "./levels/level" + std::to_string(nMap) + ".txt";
-	std::ifstream fichier(sMap);	
+	std::ifstream fichier("./levels/" + sMap + ".txt");	
 
 	// Fichier ouvert
 	if(fichier)
@@ -29,6 +29,12 @@ Tilemap::Tilemap(int nMap)
 		while(i < 12)
 		{
 			fichier.get(carac);	// Récupère un élément du niveau dans le fichier
+			
+			// Si le caractère lu représente Mario
+			if(carac == '8')
+			{
+				mario.setPosition(j*34, i*34); // Place Mario
+			}
 
 			// Si le caractère lu n'est pas un retour à la ligne
 			// Evite l'ajout d'une sprite à la matrice ne correspondant à aucun élément du niveau
@@ -55,8 +61,11 @@ Tilemap::Tilemap(int nMap)
 	else {std::cerr << "Impossible de charger les données du niveau" << std::endl;}
 }
 
-void Tilemap::afficheMap(sf::RenderWindow & window)
+void Tilemap::afficheMap(sf::RenderWindow & window, Mario & mario)
 {
+	int xMario, yMario;
+	mario.getTileMario(yMario, xMario);
+
 	// Crée un fond gris clair
 	sf::Color clr(180, 180, 180);
 	window.clear(clr);
@@ -66,9 +75,29 @@ void Tilemap::afficheMap(sf::RenderWindow & window)
 	{
 		for(int j = 0 ; j < 12 ; j++)
 		{
-			window.draw(this->_sprMap[i][j]); // Dessine la sprite dans la fenêtre
+			// Si la case est celle de Mario
+			if(j == xMario && i == yMario)
+			{
+				window.draw(mario); // Dessine Mario
+			}
+			else
+			{
+				window.draw(this->_sprMap[i][j]); // Dessine la sprite de la tilemap dans la fenêtre
+			}
 		}
 	}
 
 	window.display(); // Actualise l'affichage de la fenêtre
+}
+
+bool Tilemap::isCollision(int i, int j)
+{
+	if(this->_sprMap[i][j].getTexture() == &(this->_txMap.at('#')))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

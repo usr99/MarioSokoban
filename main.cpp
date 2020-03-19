@@ -1,7 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include "tilemap.hpp"
+#include "jeu.hpp"
 
 int main()
 {
@@ -12,8 +9,6 @@ int main()
 	sf::Texture tx_fond;
 	tx_fond.loadFromFile("./img/menu.jpg");
 	sf::Sprite spr_fond(tx_fond);
-
-	Tilemap map(1);	// Charge le niveau 1
 
 	// Maintient le programme en fonctionnement
 	while(window.isOpen())
@@ -31,7 +26,7 @@ int main()
 			case sf::Event::KeyPressed: // Touche du clavier enfoncée
 				if(event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) // Touche "1"
 				{
-					while(1) {map.afficheMap(window);}
+					sokoban(window, "1"); // Lance le jeu
 				}
 				else if(event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) // Touche "2"
 				{

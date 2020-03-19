@@ -1,20 +1,22 @@
 #ifndef TILEMAP_HPP
-#define TILEMAP_HP
+#define TILEMAP_HPP
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/System.hpp>
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <map>
 
+class Mario;
+
 class Tilemap
 {
 	public:
 
-		Tilemap(int nMap);
-		void afficheMap(sf::RenderWindow & window);
+		Tilemap(std::string sMap, Mario & mario);
+		void afficheMap(sf::RenderWindow & window, Mario & mario);
+		bool isCollision(int i, int j);
 
 	private:
 
